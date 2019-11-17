@@ -150,7 +150,6 @@ class UserControllerTest {
     @Test
     public void updateUserNotFound() throws Exception {
         final var userDetailsDTOArgumentCaptor = ArgumentCaptor.forClass(UserDetailsDTO.class);
-        final var user = createMockUser();
         when(userService.updateUser(any(UserDetailsDTO.class), eq(USER_ID_1))).thenReturn(Optional.empty());
 
         mockMvc.perform(patch(USER_SPECIFIC_PATH, USER_ID_1)

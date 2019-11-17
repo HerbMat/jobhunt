@@ -9,7 +9,6 @@ import dna.jobhunt.domain.User;
 import dna.jobhunt.exception.EmployerNotFoundException;
 import dna.jobhunt.repository.JobOfferRepository;
 import dna.jobhunt.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
