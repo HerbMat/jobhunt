@@ -27,10 +27,17 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.isNull;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
@@ -65,7 +72,7 @@ class JobOfferControllerTest {
 
     @DisplayName("It should return all job offers for specified category and employer.")
     @Test
-    void getValidJobOffersForCategoryAndEmployer() throws Exception {
+    public void getValidJobOffersForCategoryAndEmployer() throws Exception {
         when(jobOfferService.getValidJobOffersForCategoryAndEmployer(eq(Category.Courier), eq(EMPLOYER_USERNAME)))
                 .thenReturn(List.of(createMockJobOffer1(), createMockJobOffer2()));
 
@@ -91,7 +98,7 @@ class JobOfferControllerTest {
 
     @DisplayName("It should return all job offers for not specified category and employer.")
     @Test
-    void getValidJobOffersAll() throws Exception {
+    public void getValidJobOffersAll() throws Exception {
         when(jobOfferService.getValidJobOffersForCategoryAndEmployer(isNull(), isNull()))
                 .thenReturn(List.of(createMockJobOffer1(), createMockJobOffer2()));
 
@@ -115,7 +122,7 @@ class JobOfferControllerTest {
 
     @DisplayName("It should create new user with valid data.")
     @Test
-    void addJobOffer() throws Exception {
+    public void addJobOffer() throws Exception {
         final var jobOfferDetailsDTOArgumentCaptor = ArgumentCaptor.forClass(JobOfferDetailsDTO.class);
         final var jobOffer = createMockJobOffer1();
         when(jobOfferService.addJobOffer(any(JobOfferDetailsDTO.class))).thenReturn(jobOffer);
@@ -142,7 +149,7 @@ class JobOfferControllerTest {
 
     @DisplayName("It should throw validation errors.")
     @Test
-    void addJobOfferValidationFail() throws Exception {
+    public void addJobOfferValidationFail() throws Exception {
         mockMvc.perform(post(BASE_JOB_OFFERS_PATH)
                 .content(objectMapper.writeValueAsString(new JobOfferDTO()))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -160,7 +167,7 @@ class JobOfferControllerTest {
 
     @DisplayName("It should throw employer not found for non existing employer.")
     @Test
-    void addJobOfferNotFoundEmployer() throws Exception {
+    public void addJobOfferNotFoundEmployer() throws Exception {
 
         when(jobOfferService.addJobOffer(any())).thenThrow(EmployerNotFoundException.class);
 

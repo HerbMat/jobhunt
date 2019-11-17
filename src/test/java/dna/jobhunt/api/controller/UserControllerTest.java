@@ -26,9 +26,18 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -62,7 +71,7 @@ class UserControllerTest {
 
     @DisplayName("It should return 200 and user list.")
     @Test
-    void getAllUsers() throws Exception {
+    public void getAllUsers() throws Exception {
         final var users = createMockUserList();
         when(userService.getUsers()).thenReturn(users);
 
@@ -82,7 +91,7 @@ class UserControllerTest {
 
     @DisplayName("It should return 200 and existing user.")
     @Test
-    void getUserExisting() throws Exception {
+    public void getUserExisting() throws Exception {
         final var user = createMockUser();
         when(userService.getUserById(USER_ID_1)).thenReturn(Optional.of(user));
 
@@ -97,7 +106,7 @@ class UserControllerTest {
 
     @DisplayName("It should return 404 for not existing user.")
     @Test
-    void getUserNotExisting() throws Exception {
+    public void getUserNotExisting() throws Exception {
         when(userService.getUserById(USER_ID_1)).thenReturn(Optional.empty());
 
         mockMvc.perform(get(USER_SPECIFIC_PATH, USER_ID_1).contentType(MediaType.APPLICATION_JSON))
@@ -106,7 +115,7 @@ class UserControllerTest {
 
     @DisplayName("It should return 204 for successful deleting existing user.")
     @Test
-    void deleteUser() throws Exception {
+    public void deleteUser() throws Exception {
         mockMvc.perform(delete(USER_SPECIFIC_PATH, USER_ID_1).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
@@ -115,7 +124,7 @@ class UserControllerTest {
 
     @DisplayName("It should return 200 and updated user.")
     @Test
-    void updateUser() throws Exception {
+    public void updateUser() throws Exception {
         final var userDetailsDTOArgumentCaptor = ArgumentCaptor.forClass(UserDetailsDTO.class);
         final var user = createMockUser();
         when(userService.updateUser(any(UserDetailsDTO.class), eq(USER_ID_1))).thenReturn(Optional.of(user));
@@ -139,7 +148,7 @@ class UserControllerTest {
 
     @DisplayName("It should return 404 and do not update user.")
     @Test
-    void updateUserNotFound() throws Exception {
+    public void updateUserNotFound() throws Exception {
         final var userDetailsDTOArgumentCaptor = ArgumentCaptor.forClass(UserDetailsDTO.class);
         final var user = createMockUser();
         when(userService.updateUser(any(UserDetailsDTO.class), eq(USER_ID_1))).thenReturn(Optional.empty());
@@ -158,7 +167,7 @@ class UserControllerTest {
 
     @DisplayName("It should return 201 and newly created user.")
     @Test
-    void createUser() throws Exception {
+    public void createUser() throws Exception {
         final var userDetailsDTOArgumentCaptor = ArgumentCaptor.forClass(UserDetailsDTO.class);
         final var user = createMockUser();
         when(userService.createUser(any(UserDetailsDTO.class))).thenReturn(user);
@@ -182,7 +191,7 @@ class UserControllerTest {
 
     @DisplayName("It should return 400 and error list.")
     @Test
-    void createUserValidationError() throws Exception {
+    public void createUserValidationError() throws Exception {
         mockMvc.perform(post(USERS_BASE_PATH)
                 .content(objectMapper.writeValueAsString(new UserDetailsDTO()))
                 .contentType(MediaType.APPLICATION_JSON)

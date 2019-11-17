@@ -16,9 +16,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class DefaultUserServiceTest {
@@ -38,7 +43,7 @@ class DefaultUserServiceTest {
 
     @DisplayName("It should create new user successfully.")
     @Test
-    void createUser() {
+    public void createUser() {
         final var userDetails = createMockUserDetailsDTo();
         final var mappedUser = new User();
         final var createdUserDTO = new UserDTO();
@@ -57,7 +62,7 @@ class DefaultUserServiceTest {
 
     @DisplayName("It should update only username.")
     @Test
-    void updateUserWithUsername() {
+    public void updateUserWithUsername() {
         final var userDetails = UserDetailsDTO.builder()
                 .username(TEST_USERNAME)
                 .build();
@@ -69,7 +74,7 @@ class DefaultUserServiceTest {
 
     @DisplayName("It should update only password.")
     @Test
-    void updateUserWithPassword() {
+    public void updateUserWithPassword() {
         final var userDetails = UserDetailsDTO.builder()
                 .password(TEST_PASSWORD)
                 .build();
@@ -80,7 +85,7 @@ class DefaultUserServiceTest {
 
     @DisplayName("It should update username and password.")
     @Test
-    void updateUserWithUsernameAndPassword() {
+    public void updateUserWithUsernameAndPassword() {
         final var userDetails = UserDetailsDTO.builder()
                 .username(TEST_USERNAME)
                 .password(TEST_PASSWORD)
@@ -92,7 +97,7 @@ class DefaultUserServiceTest {
 
     @DisplayName("It should not update not existing user.")
     @Test
-    void updateUserFail() {
+    public void updateUserFail() {
         final var userDetails = UserDetailsDTO.builder()
                 .username(TEST_USERNAME)
                 .password(TEST_PASSWORD)

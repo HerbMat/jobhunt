@@ -25,7 +25,12 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class DefaultJobOfferServiceTest {
@@ -44,13 +49,9 @@ class DefaultJobOfferServiceTest {
     @InjectMocks
     private DefaultJobOfferService jobOfferService;
 
-    @BeforeEach
-    void setUp() {
-    }
-
     @DisplayName("It creates new job and sets right employer successfully.")
     @Test
-    void addJobOffer() {
+    public void addJobOffer() {
         final var jobOfferArgumentCaptor = ArgumentCaptor.forClass(JobOffer.class);
         final var mockJobOfferDetails = JobOfferDetailsDTO.builder()
                 .employer(USERNAME)
@@ -75,7 +76,7 @@ class DefaultJobOfferServiceTest {
 
     @DisplayName("It throws EmployerNotFoundException for not existing employer with given username.")
     @Test
-    void addJobOfferNotExistingUser() {
+    public void addJobOfferNotExistingUser() {
         final var mockJobOfferDetails = JobOfferDetailsDTO.builder()
                 .employer(USERNAME)
                 .build();
@@ -90,7 +91,7 @@ class DefaultJobOfferServiceTest {
 
     @DisplayName("It should return valid job offers for given username and category")
     @Test
-    void getValidJobOffersForCategoryAndEmployer() {
+    public void getValidJobOffersForCategoryAndEmployer() {
         final List<JobOffer> jobOffers = List.of();
         when(jobOfferRepository.findAllValidJobOffersForEmployerAndDateAndCategory(eq(USERNAME), eq(Category.Drinks), any(LocalDate.class)))
             .thenReturn(jobOffers);
@@ -110,7 +111,7 @@ class DefaultJobOfferServiceTest {
 
     @DisplayName("It should return valid job offers for given employer username.")
     @Test
-    void getValidJobOffersForEmployer() {
+    public void getValidJobOffersForEmployer() {
         final List<JobOffer> jobOffers = List.of();
         when(jobOfferRepository.findAllValidJobOffersForEmployerAndDate(eq(USERNAME), any(LocalDate.class)))
                 .thenReturn(jobOffers);
@@ -130,7 +131,7 @@ class DefaultJobOfferServiceTest {
 
     @DisplayName("It should return valid job offers for category")
     @Test
-    void getValidJobOffersForCategory() {
+    public void getValidJobOffersForCategory() {
         final List<JobOffer> jobOffers = List.of();
         when(jobOfferRepository.findAllValidJobOffersForCategoryAndDate(eq(Category.Drinks), any(LocalDate.class)))
                 .thenReturn(jobOffers);
@@ -150,7 +151,7 @@ class DefaultJobOfferServiceTest {
 
     @DisplayName("It should return all valid job offers.")
     @Test
-    void getValidJobOffers() {
+    public void getValidJobOffers() {
         final List<JobOffer> jobOffers = List.of();
         when(jobOfferRepository.findAllValidJobOffersForDate(any(LocalDate.class)))
                 .thenReturn(jobOffers);
